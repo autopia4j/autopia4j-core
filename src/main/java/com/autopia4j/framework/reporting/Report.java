@@ -59,6 +59,15 @@ public class Report {
 		testStatus = "Passed";
 	}
 	
+	
+	/**
+	 * Function to get the current {@link ReportSettings}
+	 * @return The {@link ReportSettings} object
+	 */
+	public ReportSettings getReportSettings() {
+		return reportSettings;
+	}
+	
 	/**
 	 * Function to get the current status of the test being executed
 	 * @return the current status of the test being executed
