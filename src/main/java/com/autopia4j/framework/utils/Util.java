@@ -1,5 +1,7 @@
 package com.autopia4j.framework.utils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -99,5 +101,21 @@ public class Util {
 	 */
 	public static String unCapitalizeFirstLetter(String input) {
 		return input.substring(0, 1).toLowerCase() + input.substring(1);
+	}
+	
+	/**
+	 * Function to initiate a {@link URL} object based on the given URL string
+	 * @param urlAsString The URL string
+	 * @return The {@link URL} object based on the given URL string
+	 */
+	public static URL getUrl(String urlAsString) {
+		URL url;
+		try {
+			url = new URL(urlAsString);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			throw new FrameworkException("The specified URL string is malformed");
+		}
+		return url;
 	}
 }
