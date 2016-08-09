@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.autopia4j.framework</groupId>
   <artifactId>autopia4j-core</artifactId>
-  <version>1.0.0</version>
-  <name>autopia4j framework</name>
-  <description>autopia4j framework</description>
+  <version>1.0.1</version>
+  <name>autopia4j framework core library</name>
+  <description>autopia4j framework core library</description>
   <build>
     <plugins>
       <plugin>
@@ -22,13 +22,13 @@
       </plugin>
     </plugins>
   </build>
-  <url>https://bitbucket.org/autopiateam/autopia4j</url>
+  <url>https://bitbucket.org/autopiateam/autopia4j-core</url>
   <organization>
-  	<name>Autopia</name>
+  	<name>Autopia Team</name>
   	<url>https://bitbucket.org/autopiateam</url>
   </organization>
   <issueManagement>
-  	<url>https://bitbucket.org/autopiateam/autopia4j/issues?status=new&amp;status=open</url>
+  	<url>https://bitbucket.org/autopiateam/autopia4j-core/issues?status=new&amp;status=open</url>
   	<system>BitBucket</system>
   </issueManagement>
   <dependencies>
