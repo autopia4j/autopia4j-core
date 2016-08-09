@@ -112,7 +112,7 @@ public class ExcelCellFormatting {
 	
 	/**
 	 * Function to set whether the cell contents should be in italics or not
-	 * @param bold Boolean variable indicating whether the cell contents should be in italics or not
+	 * @param italics Boolean variable indicating whether the cell contents should be in italics or not
 	 */
 	public void setItalics(boolean italics) {
 		this.italics = italics;
@@ -128,7 +128,7 @@ public class ExcelCellFormatting {
 	
 	/**
 	 * Function to set whether the cell contents should be centered or not
-	 * @param bold Boolean variable indicating whether the cell contents should be centered or not
+	 * @param centered Boolean variable indicating whether the cell contents should be centered or not
 	 */
 	public void setCentered(boolean centered) {
 		this.centered = centered;
