@@ -3,7 +3,6 @@ package com.autopia4j.framework.utils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -16,13 +15,17 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to manage interactions with MS Word Documents
  * @author vj
  */
 public class WordDocumentManager {
-	private final String filePath, fileName;
+	private final Logger logger = LoggerFactory.getLogger(WordDocumentManager.class);
+	private final String filePath;
+	private final String fileName;
 	
 	
 	/**
@@ -50,56 +53,14 @@ public class WordDocumentManager {
 		String absoluteFilePath = filePath + Util.getFileSeparator() +
 														fileName + ".docx";
 		
-		FileOutputStream fileOutputStream;
-		try {
-			fileOutputStream = new FileOutputStream(absoluteFilePath);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new FrameworkException("The specified file \"" + absoluteFilePath + "\" does not exist!");
-		}
-		
-		try {
+		try (FileOutputStream fileOutputStream = new FileOutputStream(absoluteFilePath);) {
 			document.write(fileOutputStream);
-			fileOutputStream.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while writing into the specified Word document \"" + absoluteFilePath + "\"");
+			String errorDescription = "Error while writing into the specified Word document \"" + absoluteFilePath + "\"";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
-	
-	/**
-	 * Function to add a picture to the Word document
-	 * @param pictureFile the picture {@link File} to be inserted
-	 */
-	/*public void addPicture(File pictureFile) {
-		XWPFDocument document = openFileForReading();
-		XWPFParagraph paragraph = document.createParagraph();
-		paragraph.setAlignment(ParagraphAlignment.CENTER);
-		
-		XWPFRun run = paragraph.createRun();
-		run.setText(pictureFile.getName());
-		run.addBreak();
-		
-		try {
-			run.addPicture(new FileInputStream(pictureFile),
-								XWPFDocument.PICTURE_TYPE_PNG,
-								pictureFile.getName(),
-								Units.toEMU(200), Units.toEMU(200));
-		} catch (InvalidFormatException e) {
-			e.printStackTrace();
-			throw new FrameworkException("InvalidFormatException thrown while adding a picture file to a Word document");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new FrameworkException("FileNotFoundException thrown while adding a picture file to a Word document");
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("IOException thrown while adding a picture file to a Word document");
-		}
-		
-		run.addBreak(BreakType.PAGE);
-		
-		writeIntoFile(document);
-	}*/
 	
 	/**
 	 * Function to add a picture to the Word document
@@ -112,7 +73,6 @@ public class WordDocumentManager {
 		
 		XWPFRun run = paragraph.createRun();
 		run.setText(pictureFile.getName());
-		//run.addCarriageReturn();
 		
 		String id;
 		try {
@@ -124,8 +84,9 @@ public class WordDocumentManager {
 						document.getNextPicNameNumber(Document.PICTURE_TYPE_PNG),
 						image.getWidth(), image.getHeight());
 		} catch (InvalidFormatException | IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Exception thrown while adding a picture file to a Word document");
+			String errorDescription = "Exception thrown while adding a picture file to a Word document";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		paragraph = document.createParagraph();
@@ -139,22 +100,13 @@ public class WordDocumentManager {
 		String absoluteFilePath = filePath + Util.getFileSeparator() +
 														fileName + ".docx";
 		
-		FileInputStream fileInputStream;
-		try	{
-			fileInputStream = new FileInputStream(absoluteFilePath);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new FrameworkException("The specified file \"" + absoluteFilePath + "\" does not exist!");
-		}
-		
-		CustomXWPFDocument document;
-		try {
-			document = new CustomXWPFDocument(fileInputStream);
+		try (FileInputStream fileInputStream = new FileInputStream(absoluteFilePath);
+				CustomXWPFDocument document = new CustomXWPFDocument(fileInputStream);) {
+			return document;
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while opening the specified Word document \"" + absoluteFilePath + "\"");
+			String errorDescription = "Error while opening the specified Word document \"" + absoluteFilePath + "\"";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
-		
-		return document;
 	}
 }

@@ -1,19 +1,26 @@
 package com.autopia4j.framework.datatable.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.datatable.DataTableType;
 import com.autopia4j.framework.utils.ExcelDataAccess;
 import com.autopia4j.framework.utils.FrameworkException;
+import com.autopia4j.framework.utils.Util;
 
 /**
  * Class to encapsulate the datatable related functions of the framework
  * @author vj
  */
 public class KeywordDatatable implements DataTableType {
-	private final String datatablePath, datatableName;
+	private final Logger logger = LoggerFactory.getLogger(KeywordDatatable.class);
+	private final String datatablePath;
+	private final String datatableName;
 	private String dataReferenceIdentifier = "#";
 	
 	private String currentTestcase;
-	private int currentIteration = 0, currentSubIteration = 0;
+	private int currentIteration = 0;
+	private int currentSubIteration = 0;
 	
 	
 	/**
@@ -24,12 +31,17 @@ public class KeywordDatatable implements DataTableType {
 	public KeywordDatatable(String datatablePath, String datatableName) {
 		this.datatablePath = datatablePath;
 		this.datatableName = datatableName;
+		
+		logger.info("Initializing datatable @ " + datatablePath +
+						Util.getFileSeparator() + datatableName + ".xls");
 	}
 	
 	@Override
 	public void setDataReferenceIdentifier(String dataReferenceIdentifier) {
 		if (dataReferenceIdentifier.length() != 1) {
-			throw new FrameworkException("The data reference identifier must be a single character!");
+			String errorMessage = "The data reference identifier must be a single character!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		this.dataReferenceIdentifier = dataReferenceIdentifier;
@@ -37,7 +49,9 @@ public class KeywordDatatable implements DataTableType {
 	
 	@Override
 	public void setCurrentRow(String currentTestcase, int currentIteration) {
-		throw new FrameworkException("Not applicable for keyword framework datatable");
+		String errorMessage = "setCurrentRow(): Missing argument 'currentSubIteration'!";
+		logger.error(errorMessage);
+		throw new FrameworkException(errorMessage);
 	}
 	
 	@Override
@@ -45,6 +59,8 @@ public class KeywordDatatable implements DataTableType {
 		this.currentTestcase = currentTestcase;
 		this.currentIteration = currentIteration;
 		this.currentSubIteration = currentSubIteration;
+		
+		logger.debug("Setting current row: " + currentTestcase + ", " + currentIteration + ", " + currentSubIteration);
 	}
 	
 	@Override
@@ -62,13 +78,19 @@ public class KeywordDatatable implements DataTableType {
 	
 	private void checkPreRequisites() {
 		if(currentTestcase == null) {
-			throw new FrameworkException("CraftDataTable.currentTestCase is not set!");
+			String errorMessage = "The currentTestCase is not set!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		if(currentIteration == 0) {
-			throw new FrameworkException("CraftDataTable.currentIteration is not set!");
+			String errorMessage = "The currentIteration is not set!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		if(currentSubIteration == 0) {
-			throw new FrameworkException("CraftDataTable.currentSubIteration is not set!");
+			String errorMessage = "The currentSubIteration is not set!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 	}
 	
@@ -81,21 +103,27 @@ public class KeywordDatatable implements DataTableType {
 		
 		int rowNum = testDataAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+									"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
+									"of the test case \"" + currentTestcase + "\"" +
+									"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The sub iteration number \"" + currentSubIteration + "\"" +
-										"under iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
+									"under iteration number \"" + currentIteration + "\"" +
+									"of the test case \"" + currentTestcase + "\"" +
+									"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		String dataValue = testDataAccess.getValue(rowNum, fieldName);
@@ -115,8 +143,10 @@ public class KeywordDatatable implements DataTableType {
 		
 		int rowNum = commonDataAccess.getRowNum(dataReferenceId, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The common test data row identified by \"" + dataReferenceId + "\"" +
-										"is not found in the common test data sheet!");
+			String errorMessage = "The common test data row identified by \"" + dataReferenceId + "\"" +
+										"is not found in the common test data sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		return commonDataAccess.getValue(rowNum, fieldName);
@@ -131,21 +161,27 @@ public class KeywordDatatable implements DataTableType {
 		
 		int rowNum = testDataAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
 										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The sub iteration number \"" + currentSubIteration + "\"" +
+			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
 										"under iteration number \"" + currentIteration + "\"" +
 										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		synchronized (KeywordDatatable.class) {
@@ -162,21 +198,27 @@ public class KeywordDatatable implements DataTableType {
 		
 		int rowNum = expectedResultsAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the parametrized checkpoints sheet!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+									"is not found in the parametrized checkpoints sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the parametrized checkpoints sheet!");
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
+									"of the test case \"" + currentTestcase + "\"" +
+									"is not found in the parametrized checkpoints sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The sub iteration number \"" + currentSubIteration + "\"" +
-										"under iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the parametrized checkpoints sheet!");
+			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
+									"under iteration number \"" + currentIteration + "\"" +
+									"of the test case \"" + currentTestcase + "\"" +
+									"is not found in the parametrized checkpoints sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		return expectedResultsAccess.getValue(rowNum, fieldName);

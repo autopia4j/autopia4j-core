@@ -5,9 +5,12 @@ package com.autopia4j.framework.reporting;
  * @author Cognizant
  */
 public class ReportTheme {
-	private String headingBackColor, headingForeColor;
-	private String sectionBackColor, sectionForeColor;
-	private String contentBackColor, contentForeColor;
+	private String headingBackColor;
+	private String headingForeColor;
+	private String sectionBackColor;
+	private String sectionForeColor;
+	private String contentBackColor;
+	private String contentForeColor;
 	
 	/**
 	 * Function to get the heading background color

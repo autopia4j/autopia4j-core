@@ -6,6 +6,8 @@ import org.apache.xmlbeans.XmlToken;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTNonVisualDrawingProps;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTPositiveSize2D;
 import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +19,7 @@ import java.io.InputStream;
  * Hopefully, the file corruption bug will be fixed in future versions of POI, and this class can be retired
  */
 class CustomXWPFDocument extends XWPFDocument {
+	private final Logger logger = LoggerFactory.getLogger(CustomXWPFDocument.class);
 	private static final int EMU = 9525;
 	
     CustomXWPFDocument(InputStream in) throws IOException {
@@ -25,9 +28,8 @@ class CustomXWPFDocument extends XWPFDocument {
     
     
     void createPicture(String blipId, int id, int width, int height) {
-		width *= EMU;
-		height *= EMU;
-		//String blipId = getAllPictures().get(id).getPackageRelationship().getId();
+    	int widthInEmu = width * EMU;
+    	int heightInEmu = height * EMU;
 		
 		CTInline inline = createParagraph().createRun().getCTR().addNewDrawing().addNewInline();
 		
@@ -48,7 +50,7 @@ class CustomXWPFDocument extends XWPFDocument {
 		        "         <pic:spPr>" +
 		        "            <a:xfrm>" +
 		        "               <a:off x=\"0\" y=\"0\"/>" +
-		        "               <a:ext cx=\"" + width + "\" cy=\"" + height + "\"/>" +
+		        "               <a:ext cx=\"" + widthInEmu + "\" cy=\"" + heightInEmu + "\"/>" +
 		        "            </a:xfrm>" +
 		        "            <a:prstGeom prst=\"rect\">" +
 		        "               <a:avLst/>" +
@@ -58,15 +60,13 @@ class CustomXWPFDocument extends XWPFDocument {
 		        "   </a:graphicData>" +
 		        "</a:graphic>";
 		
-		//CTGraphicalObjectData graphicData = inline.addNewGraphic().addNewGraphicData();
 		XmlToken xmlToken = null;
 		try {
 		    xmlToken = XmlToken.Factory.parse(picXml);
 		} catch(XmlException xe) {
-		    xe.printStackTrace();
+			logger.error("Exception while parsing XML token", xe);
 		}
 		inline.set(xmlToken);
-		//graphicData.set(xmlToken);
 		
 		inline.setDistT(0);
 		inline.setDistB(0);
@@ -74,8 +74,8 @@ class CustomXWPFDocument extends XWPFDocument {
 		inline.setDistR(0);
 		
 		CTPositiveSize2D extent = inline.addNewExtent();
-		extent.setCx(width);
-		extent.setCy(height);
+		extent.setCx(widthInEmu);
+		extent.setCy(heightInEmu);
 		
 		CTNonVisualDrawingProps docPr = inline.addNewDocPr();
 		docPr.setId(id);

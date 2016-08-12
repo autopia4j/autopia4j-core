@@ -3,6 +3,9 @@ package com.autopia4j.framework.core;
 import java.io.File;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
@@ -12,6 +15,7 @@ import com.autopia4j.framework.utils.Util;
  * @author vj
  */
 public class TimeStamp {
+	private static final Logger logger = LoggerFactory.getLogger(TimeStamp.class);
 	private static volatile String reportPathWithTimeStamp;
 	
 	private TimeStamp() {
@@ -30,9 +34,11 @@ public class TimeStamp {
 											FrameworkParameters.getInstance();
 					
 					if(frameworkParameters.getBasePath() == null) {
+						logger.error("FrameworkParameters.basePath is not set!");
 						throw new FrameworkException("FrameworkParameters.basePath is not set!");
 					}
 					if(frameworkParameters.getRunConfiguration() == null) {
+						logger.error("FrameworkParameters.runConfiguration is not set!");
 						throw new FrameworkException("FrameworkParameters.runConfiguration is not set!");
 					}
 					

@@ -7,12 +7,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Class to encapsulate utility functions of the framework
  * @author vj
  */
 public class Util {
+	private static final Logger logger = LoggerFactory.getLogger(Util.class);
+	
 	private Util() {
 		// To prevent external instantiation of this class
 	}
@@ -113,8 +118,9 @@ public class Util {
 		try {
 			url = new URL(urlAsString);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			throw new FrameworkException("The specified URL string is malformed");
+			String errorDescription = "The specified URL string is malformed";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		return url;
 	}

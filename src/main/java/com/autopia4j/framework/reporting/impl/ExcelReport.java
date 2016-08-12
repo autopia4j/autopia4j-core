@@ -19,6 +19,14 @@ public class ExcelReport implements ReportType {
 	private static final String TEST_LOG = "Test_Log";
 	private static final String RESULT_SUMMARY = "Result_Summary";
 	
+	private static final String FONT_NAME = "Verdana";
+	
+	private static final String STEP_NO = "Step_No";
+	private static final String STEP_NAME = "Step_Name";
+	private static final String STEP_DESCRIPTION = "Description";
+	private static final String STATUS = "Status";
+	private static final String STEP_TIME = "Step_Time";
+	
 	private static final String MODULE = "Module";
 	private static final String TEST_CASE = "Test_Case";
 	private static final String TEST_INSTANCE = "Test_Instance";
@@ -27,7 +35,8 @@ public class ExcelReport implements ReportType {
 	private static final String EXECUTION_TIME = "Execution_Time";
 	private static final String TEST_STATUS = "Test_Status";
 	
-	private ExcelDataAccess testLogAccess, resultSummaryAccess;
+	private ExcelDataAccess testLogAccess;
+	private ExcelDataAccess resultSummaryAccess;
 	
 	private ReportSettings reportSettings;
 	private ReportTheme reportTheme;
@@ -110,7 +119,7 @@ public class ExcelReport implements ReportType {
 		testLogAccess.setDatasheetName(COVER_PAGE);
 		int rowNum = testLogAccess.addRow();
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(false);
@@ -128,18 +137,18 @@ public class ExcelReport implements ReportType {
 	public void addTestLogTableHeadings() {
 		testLogAccess.setDatasheetName(TEST_LOG);
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(true);
 		cellFormatting.setBackColorIndex((short) 0x8);
 		cellFormatting.setForeColorIndex((short) 0x9);
 		
-		testLogAccess.addColumn("Step_No", cellFormatting);
-		testLogAccess.addColumn("Step_Name", cellFormatting);
-		testLogAccess.addColumn("Description", cellFormatting);
-		testLogAccess.addColumn("Status", cellFormatting);
-		testLogAccess.addColumn("Step_Time", cellFormatting);
+		testLogAccess.addColumn(STEP_NO, cellFormatting);
+		testLogAccess.addColumn(STEP_NAME, cellFormatting);
+		testLogAccess.addColumn(STEP_DESCRIPTION, cellFormatting);
+		testLogAccess.addColumn(STATUS, cellFormatting);
+		testLogAccess.addColumn(STEP_TIME, cellFormatting);
 	}
 	
 	@Override
@@ -160,7 +169,7 @@ public class ExcelReport implements ReportType {
 		currentSectionRowNum = rowNum + 1;
 		currentSubSectionRowNum = 0;
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(false);
@@ -183,7 +192,7 @@ public class ExcelReport implements ReportType {
 		
 		currentSubSectionRowNum = rowNum + 1;
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(false);
@@ -201,7 +210,7 @@ public class ExcelReport implements ReportType {
 		testLogAccess.setDatasheetName(TEST_LOG);
 		int rowNum = testLogAccess.addRow();
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBackColorIndex((short) 0xC);
 		
@@ -209,29 +218,29 @@ public class ExcelReport implements ReportType {
 		
 		cellFormatting.setCentered(true);
 		cellFormatting.setBold(true);
-		int columnNum = testLogAccess.getColumnNum("Status", 0);
+		int columnNum = testLogAccess.getColumnNum(STATUS, 0);
 		testLogAccess.setValue(rowNum, columnNum, stepStatus.toString(), cellFormatting);
 		
 		cellFormatting.setForeColorIndex((short) 0xD);
 		cellFormatting.setBold(false);
-		testLogAccess.setValue(rowNum, "Step_No", stepNumber, cellFormatting);
-		testLogAccess.setValue(rowNum, "Step_Time", Util.getCurrentFormattedTime(reportSettings.getDateFormatString()), cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_NO, stepNumber, cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_TIME, Util.getCurrentFormattedTime(reportSettings.getDateFormatString()), cellFormatting);
 		
 		cellFormatting.setCentered(false);
-		testLogAccess.setValue(rowNum, "Step_Name", stepName, cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_NAME, stepName, cellFormatting);
 		
 		if (shouldTakeScreenshot) {
 			if (reportSettings.shouldLinkScreenshotsToTestLog()) {
 				testLogAccess.setHyperlink(rowNum, columnNum, "..\\Screenshots\\" + screenShotName);
 				
-				testLogAccess.setValue(rowNum, "Description", stepDescription, cellFormatting);
+				testLogAccess.setValue(rowNum, STEP_DESCRIPTION, stepDescription, cellFormatting);
 			} else {
-				testLogAccess.setValue(rowNum, "Description",
+				testLogAccess.setValue(rowNum, STEP_DESCRIPTION,
 										stepDescription + " (Refer screenshot @ " + screenShotName + ")",
 										cellFormatting);
 			}
 		} else {
-			testLogAccess.setValue(rowNum, "Description", stepDescription, cellFormatting);
+			testLogAccess.setValue(rowNum, STEP_DESCRIPTION, stepDescription, cellFormatting);
 		}
 	}
 	
@@ -278,7 +287,7 @@ public class ExcelReport implements ReportType {
 			testLogAccess.groupRows(currentSectionRowNum, rowNum - 1);
 		}
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(true);
@@ -293,13 +302,13 @@ public class ExcelReport implements ReportType {
 		cellFormatting.setBackColorIndex((short) 0x9);
 		
 		cellFormatting.setForeColorIndex((short) 0xE);
-		testLogAccess.setValue(rowNum, "Step_No", "Steps passed", cellFormatting);
-		testLogAccess.setValue(rowNum, "Step_Name", ": " + nStepsPassed, cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_NO, "Steps passed", cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_NAME, ": " + nStepsPassed, cellFormatting);
 		cellFormatting.setForeColorIndex((short) 0x8);
-		testLogAccess.setValue(rowNum, "Description", "", cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_DESCRIPTION, "", cellFormatting);
 		cellFormatting.setForeColorIndex((short) 0xF);
-		testLogAccess.setValue(rowNum, "Status", "Steps failed", cellFormatting);
-		testLogAccess.setValue(rowNum, "Step_Time", ": " + nStepsFailed, cellFormatting);
+		testLogAccess.setValue(rowNum, STATUS, "Steps failed", cellFormatting);
+		testLogAccess.setValue(rowNum, STEP_TIME, ": " + nStepsFailed, cellFormatting);
 		
 		wrapUpTestLog();
 	}
@@ -361,7 +370,7 @@ public class ExcelReport implements ReportType {
 		resultSummaryAccess.setDatasheetName(COVER_PAGE);
 		int rowNum = resultSummaryAccess.addRow();
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(false);
@@ -379,7 +388,7 @@ public class ExcelReport implements ReportType {
 	public void addResultSummaryTableHeadings() {
 		resultSummaryAccess.setDatasheetName(RESULT_SUMMARY);
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(true);
@@ -407,7 +416,7 @@ public class ExcelReport implements ReportType {
 		resultSummaryAccess.setDatasheetName(RESULT_SUMMARY);
 		int rowNum = resultSummaryAccess.addRow();
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBackColorIndex((short) 0xC);
 		cellFormatting.setForeColorIndex((short) 0xD);
@@ -444,7 +453,7 @@ public class ExcelReport implements ReportType {
 		resultSummaryAccess.setDatasheetName(RESULT_SUMMARY);
 		int rowNum = resultSummaryAccess.addRow();
 		
-		cellFormatting.setFontName("Verdana");
+		cellFormatting.setFontName(FONT_NAME);
 		cellFormatting.setFontSize((short) 10);
 		cellFormatting.setBold(true);
 		cellFormatting.setCentered(true);

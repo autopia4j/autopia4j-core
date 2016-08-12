@@ -10,6 +10,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.ReportSettings;
 import com.autopia4j.framework.reporting.ReportTheme;
@@ -24,7 +27,11 @@ import com.autopia4j.framework.utils.Util;
  * @author Cognizant
  */
 public class HtmlReport implements ReportType {
-	private String testLogPath, resultSummaryPath;
+	private static final String UTF_ENCODING = "UTF-8";
+	private static final String NON_BREAKING_SPACE = "&nbsp;";
+	private final Logger logger = LoggerFactory.getLogger(HtmlReport.class);
+	private String testLogPath;
+	private String resultSummaryPath;
 	private ReportSettings reportSettings;
 	private ReportTheme reportTheme;
 	
@@ -202,16 +209,9 @@ public class HtmlReport implements ReportType {
 		try {
 			testLogFile.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while creating HTML test log file");
-		}
-		
-		PrintStream printStream;
-		try {
-			printStream = new PrintStream(testLogFile, "UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while writing into HTML test log file");
+			String errorDescription = "Error while creating HTML test log file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		String testLogHeadSection;
@@ -228,8 +228,13 @@ public class HtmlReport implements ReportType {
 									getJavascriptFunctions() +
 								"\t </head> \n";
 		
-        printStream.println(testLogHeadSection);
-        printStream.close();
+		try (PrintStream printStream = new PrintStream(testLogFile, UTF_ENCODING)) {
+			printStream.println(testLogHeadSection);
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			String errorDescription = "Error while writing into HTML test log file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
+		}
 	}
 	
 	@Override
@@ -253,8 +258,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding heading to HTML test log");
+			String errorDescription = "Error while adding heading to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -271,8 +277,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogHeaderTable);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding header table to HTML test log");
+			String errorDescription = "Error while adding header table to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -286,16 +293,17 @@ public class HtmlReport implements ReportType {
 			BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 			
 		    String testLogSubHeading =	"\t\t\t\t <tr class='subheading'> \n" +
-											"\t\t\t\t\t <th>&nbsp;" + subHeading1.replace(" ", "&nbsp;") + "</th> \n" +
-											"\t\t\t\t\t <th>&nbsp;" + subHeading2.replace(" ", "&nbsp;") + "</th> \n" +
-											"\t\t\t\t\t <th>&nbsp;" + subHeading3.replace(" ", "&nbsp;") + "</th> \n" +
-											"\t\t\t\t\t <th>&nbsp;" + subHeading4.replace(" ", "&nbsp;") + "</th> \n" +
+											"\t\t\t\t\t <th>&nbsp;" + subHeading1.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+											"\t\t\t\t\t <th>&nbsp;" + subHeading2.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+											"\t\t\t\t\t <th>&nbsp;" + subHeading3.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+											"\t\t\t\t\t <th>&nbsp;" + subHeading4.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
 										"\t\t\t\t </tr> \n";
 		    bufferedWriter.append(testLogSubHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding sub-heading to HTML test log");
+			String errorDescription = "Error while adding sub-heading to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -314,8 +322,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogMainTable);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding main table to HTML test log");
+			String errorDescription = "Error while adding main table to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -344,8 +353,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogTableHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding main table headings to HTML test log");
+			String errorDescription = "Error while adding main table headings to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -374,8 +384,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogSection);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding section to HTML test log");
+			String errorDescription = "Error while adding section to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -397,8 +408,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogSubSection);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding sub-section to HTML test log");
+			String errorDescription = "Error while adding sub-section to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -429,8 +441,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testStepRow);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while updating HTML test log");
+			String errorDescription = "Error while updating HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -511,8 +524,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testLogFooter);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding footer to HTML test log");
+			String errorDescription = "Error while adding footer to HTML test log";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -526,16 +540,9 @@ public class HtmlReport implements ReportType {
 		try {
 			resultSummaryFile.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while creating HTML result summary file");
-		}
-		
-		PrintStream printStream;
-		try {
-			printStream = new PrintStream(resultSummaryFile, "UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while writing into HTML result summary file");
+			String errorDescription = "Error while creating HTML result summary file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		String resultSummaryHeader;
@@ -551,8 +558,13 @@ public class HtmlReport implements ReportType {
 									getJavascriptFunctions() +
 								"\t </head> \n";
 		
-		printStream.println (resultSummaryHeader);
-        printStream.close();
+		try (PrintStream printStream = new PrintStream(resultSummaryFile, UTF_ENCODING)) {
+			printStream.println (resultSummaryHeader);
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			String errorDescription = "Error while writing into HTML result summary file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
+		}
 	}
 	
 	@Override
@@ -576,8 +588,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(resultSummaryHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding heading to HTML result summary");
+			String errorDescription = "Error while adding heading to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -594,8 +607,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(resultSummaryHeaderTable);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding header table to HTML result summary");
+			String errorDescription = "Error while adding header table to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -609,16 +623,17 @@ public class HtmlReport implements ReportType {
 			BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 			
 		    String resultSummarySubHeading =	"\t\t\t\t <tr class='subheading'> \n" +
-													"\t\t\t\t\t <th>&nbsp;" + subHeading1.replace(" ", "&nbsp;") + "</th> \n" +
-													"\t\t\t\t\t <th>&nbsp;" + subHeading2.replace(" ", "&nbsp;") + "</th> \n" +
-													"\t\t\t\t\t <th>&nbsp;" + subHeading3.replace(" ", "&nbsp;") + "</th> \n" +
-													"\t\t\t\t\t <th>&nbsp;" + subHeading4.replace(" ", "&nbsp;") + "</th> \n" +
+													"\t\t\t\t\t <th>&nbsp;" + subHeading1.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+													"\t\t\t\t\t <th>&nbsp;" + subHeading2.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+													"\t\t\t\t\t <th>&nbsp;" + subHeading3.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
+													"\t\t\t\t\t <th>&nbsp;" + subHeading4.replace(" ", NON_BREAKING_SPACE) + "</th> \n" +
 												"\t\t\t\t </tr> \n";
 		    bufferedWriter.append(resultSummarySubHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding sub-heading to HTML result summary");
+			String errorDescription = "Error while adding sub-heading to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -638,8 +653,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(resultSummaryMainTable);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding main table to HTML result summary");
+			String errorDescription = "Error while adding main table to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -670,8 +686,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(resultSummaryTableHeading);
 		    bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding main table headings to HTML result summary");
+			String errorDescription = "Error while adding main table headings to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -722,8 +739,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(testcaseRow);
 		   	bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while updating HTML result summary");
+			String errorDescription = "Error while updating HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -765,8 +783,9 @@ public class HtmlReport implements ReportType {
 		    bufferedWriter.append(resultSummaryFooter);
 			bufferedWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while adding footer to HTML result summary");
+			String errorDescription = "Error while adding footer to HTML result summary";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 }

@@ -14,6 +14,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.impl.ExcelReport;
 import com.autopia4j.framework.reporting.impl.HtmlReport;
@@ -27,6 +30,7 @@ import com.autopia4j.framework.utils.WordDocumentManager;
  * @author Cognizant
  */
 public class Report {
+	private final Logger logger = LoggerFactory.getLogger(Report.class);
 	private static final String EXCEL_RESULTS = "Excel Results";
 	private static final String HTML_RESULTS = "HTML Results";
 	private static final String SCREENSHOTS = "Screenshots";
@@ -35,10 +39,12 @@ public class Report {
 	private ReportTheme reportTheme;
 	
 	private int stepNumber;
-	private int nStepsPassed, nStepsFailed;
-	private int nTestsPassed, nTestsFailed;
+	private int nStepsPassed;
+	private int nStepsFailed;
+	private int nTestsPassed;
+	private int nTestsFailed;
 	
-	private List<ReportType> reportTypes = new ArrayList<ReportType>();
+	private List<ReportType> reportTypes = new ArrayList<>();
 	
 	private String testStatus;
 	private String failureDescription;
@@ -276,8 +282,9 @@ public class Report {
 		try {
 			robot = new Robot();
 		} catch (AWTException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while creating Robot object (for taking screenshot)");
+			String errorDescription = "Error while creating Robot object (for taking screenshot)";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		BufferedImage screenshotImage = robot.createScreenCapture(rectangle);
@@ -286,8 +293,9 @@ public class Report {
 		try {
 			ImageIO.write(screenshotImage, "jpg", screenshotFile);
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while writing screenshot to .jpg file");
+			String errorDescription = "Error while writing screenshot to .jpg file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	

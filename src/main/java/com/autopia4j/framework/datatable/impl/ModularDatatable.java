@@ -1,15 +1,21 @@
 package com.autopia4j.framework.datatable.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.datatable.DataTableType;
 import com.autopia4j.framework.utils.ExcelDataAccess;
 import com.autopia4j.framework.utils.FrameworkException;
+import com.autopia4j.framework.utils.Util;
 
 /**
  * Class to encapsulate the datatable related functions of the framework
  * @author vj
  */
 public class ModularDatatable implements DataTableType {
-	private final String datatablePath, datatableName;
+	private final Logger logger = LoggerFactory.getLogger(ModularDatatable.class);
+	private final String datatablePath;
+	private final String datatableName;
 	private String dataReferenceIdentifier = "#";
 	
 	private String currentTestcase;
@@ -24,12 +30,17 @@ public class ModularDatatable implements DataTableType {
 	public ModularDatatable(String datatablePath, String datatableName) {
 		this.datatablePath = datatablePath;
 		this.datatableName = datatableName;
+		
+		logger.info("Initializing datatable @ " + datatablePath +
+						Util.getFileSeparator() + datatableName + ".xls");
 	}
 	
 	@Override
 	public void setDataReferenceIdentifier(String dataReferenceIdentifier) {
 		if (dataReferenceIdentifier.length() != 1) {
-			throw new FrameworkException("The data reference identifier must be a single character!");
+			String errorMessage = "The data reference identifier must be a single character!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		this.dataReferenceIdentifier = dataReferenceIdentifier;
@@ -39,11 +50,15 @@ public class ModularDatatable implements DataTableType {
 	public void setCurrentRow(String currentTestcase, int currentIteration) {
 		this.currentTestcase = currentTestcase;
 		this.currentIteration = currentIteration;
+		
+		logger.debug("Setting current row: " + currentTestcase + ", " + currentIteration);
 	}
 	
 	@Override
 	public void setCurrentRow(String currentTestcase, int currentIteration, int currentSubIteration) {
-		throw new FrameworkException("Not applicable for modular framework datatable");
+		String errorMessage = "setCurrentRow(): Unrecognized argument 'currentSubIteration'!";
+		logger.error(errorMessage);
+		throw new FrameworkException(errorMessage);
 	}
 	
 	@Override
@@ -53,10 +68,14 @@ public class ModularDatatable implements DataTableType {
 	
 	private void checkPreRequisites() {
 		if(currentTestcase == null) {
-			throw new FrameworkException("CraftliteDataTable.currentTestCase is not set!");
+			String errorMessage = "The currentTestCase is not set!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		if(currentIteration == 0) {
-			throw new FrameworkException("CraftliteDataTable.currentIteration is not set!");
+			String errorMessage = "The currentIteration is not set!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 	}
 	
@@ -69,14 +88,18 @@ public class ModularDatatable implements DataTableType {
 		
 		int rowNum = testDataAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
 										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		String dataValue = testDataAccess.getValue(rowNum, fieldName);
@@ -96,8 +119,10 @@ public class ModularDatatable implements DataTableType {
 		
 		int rowNum = commonDataAccess.getRowNum(dataReferenceId, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The common test data row identified by \"" + dataReferenceId + "\"" +
-										"is not found in the common test data sheet!");
+			String errorMessage = "The common test data row identified by \"" + dataReferenceId + "\"" +
+										"is not found in the common test data sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		return commonDataAccess.getValue(rowNum, fieldName);
@@ -112,14 +137,18 @@ public class ModularDatatable implements DataTableType {
 		
 		int rowNum = testDataAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
 										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!");
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		synchronized(ModularDatatable.class) {
@@ -136,14 +165,18 @@ public class ModularDatatable implements DataTableType {
 		
 		int rowNum = expectedResultsAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
-			throw new FrameworkException("The test case \"" + currentTestcase + "\"" +
-										"is not found in the parametrized checkpoints sheet!");
+			String errorMessage = "The test case \"" + currentTestcase + "\"" +
+										"is not found in the parametrized checkpoints sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
-			throw new FrameworkException("The iteration number \"" + currentIteration + "\"" +
+			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
 										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the parametrized checkpoints sheet!");
+										"is not found in the parametrized checkpoints sheet!";
+			logger.error(errorMessage);
+			throw new FrameworkException(errorMessage);
 		}
 		
 		return expectedResultsAccess.getValue(rowNum, fieldName);

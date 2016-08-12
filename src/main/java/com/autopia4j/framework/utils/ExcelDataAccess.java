@@ -20,6 +20,8 @@ import org.apache.poi.ss.usermodel.Hyperlink;	// not available under hssf
 import org.apache.poi.ss.usermodel.CreationHelper;	// not available under hssf
 import org.apache.poi.ss.util.CellRangeAddress;
 //import org.apache.poi.hssf.util.CellRangeAddress;	not used because this is deprecated
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -27,7 +29,9 @@ import org.apache.poi.ss.util.CellRangeAddress;
  * @author vj
  */
 public class ExcelDataAccess {
-	private final String filePath, fileName;
+	private final Logger logger = LoggerFactory.getLogger(ExcelDataAccess.class);
+	private final String filePath;
+	private final String fileName;
 	private String datasheetName;
 	
 	
@@ -91,7 +95,9 @@ public class ExcelDataAccess {
 	
 	private void checkPreRequisites() {
 		if(datasheetName == null) {
-			throw new FrameworkException("ExcelDataAccess.datasheetName is not set!");
+			String errorDescription = "The datasheetName is not set!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -99,21 +105,19 @@ public class ExcelDataAccess {
 		String absoluteFilePath = filePath + Util.getFileSeparator() +
 															fileName + ".xls";
 		
-		FileInputStream fileInputStream;
-		try	{
-			fileInputStream = new FileInputStream(absoluteFilePath);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new FrameworkException("The specified file \"" + absoluteFilePath + "\" does not exist!");
-		}
-		
 		HSSFWorkbook workbook;
-		try {
+		try	{
+			FileInputStream fileInputStream = new FileInputStream(absoluteFilePath);
 			workbook = new HSSFWorkbook(fileInputStream);
-			//fileInputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while opening the specified Excel workbook \"" + absoluteFilePath + "\"");
+			fileInputStream.close();	// Comment out this line if you start seeing issues with accessing Excel files
+		} catch (FileNotFoundException e) {
+			String errorDescription = "The specified file \"" + absoluteFilePath + "\" does not exist!";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
+		}  catch (IOException e) {
+			String errorDescription = "Error while opening the specified Excel workbook \"" + absoluteFilePath + "\"";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		return workbook;
@@ -122,8 +126,10 @@ public class ExcelDataAccess {
 	private HSSFSheet getWorkSheet(HSSFWorkbook workbook) {
 		HSSFSheet worksheet = workbook.getSheet(datasheetName);
 		if (worksheet == null) {
-			throw new FrameworkException("The specified sheet \"" + datasheetName + "\"" +
-										" does not exist within the workbook \"" + fileName + ".xls\"");
+			String errorDescription = "The specified sheet \"" + datasheetName + "\"" +
+										" does not exist within the workbook \"" + fileName + ".xls\"";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		return worksheet;
@@ -134,8 +140,10 @@ public class ExcelDataAccess {
 			return "";
 		} else {
 			if (formulaEvaluator.evaluate(cell).getCellType() == HSSFCell.CELL_TYPE_ERROR) {
-				throw new FrameworkException("Error in formula within this cell! " +
-											"Error code: " + cell.getErrorCellValue());
+				String errorDescription = "Error in formula within this cell! " +
+											"Error code: " + cell.getErrorCellValue();
+				logger.error(errorDescription);
+				throw new FrameworkException(errorDescription);
 			}
 			
 			DataFormatter dataFormatter = new DataFormatter();
@@ -294,8 +302,10 @@ public class ExcelDataAccess {
 		}
 		
 		if (columnNum == -1) {
-			throw new FrameworkException("The specified column header \"" + columnHeader + "\"" +
-										" is not found in the sheet \"" + datasheetName + "\"!");
+			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
+										" is not found in the sheet \"" + datasheetName + "\"!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.getCell(columnNum);
@@ -365,20 +375,18 @@ public class ExcelDataAccess {
 		String absoluteFilePath = filePath + Util.getFileSeparator() +
 															fileName + ".xls";
 		
-		FileOutputStream fileOutputStream;
 		try	{
-			fileOutputStream = new FileOutputStream(absoluteFilePath);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new FrameworkException("The specified file \"" + absoluteFilePath + "\" does not exist!");
-		}
-		
-		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(absoluteFilePath);
 			workbook.write(fileOutputStream);
 			fileOutputStream.close();
+		} catch (FileNotFoundException e) {
+			String errorDescription = "The specified file \"" + absoluteFilePath + "\" does not exist!";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new FrameworkException("Error while writing into the specified Excel workbook \"" + absoluteFilePath + "\"");
+			String errorDescription = "Error while writing into the specified Excel workbook \"" + absoluteFilePath + "\"";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 	
@@ -424,8 +432,10 @@ public class ExcelDataAccess {
 		}
 		
 		if (columnNum == -1) {
-			throw new FrameworkException("The specified column header \"" + columnHeader + "\"" +
-										" is not found in the sheet \"" + datasheetName + "\"!");
+			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
+										" is not found in the sheet \"" + datasheetName + "\"!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.createCell(columnNum);
@@ -456,8 +466,10 @@ public class ExcelDataAccess {
 		HSSFRow row = worksheet.getRow(rowNum);
 		HSSFCell cell = row.getCell(columnNum);
 		if (cell == null) {
-			throw new FrameworkException("Specified cell is empty! " +
-										"Please set a value before including a hyperlink...");
+			String errorDescription = "Specified cell is empty! " +
+										"Please set a value before including a hyperlink...";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		setCellHyperlink(workbook, cell, linkAddress);
@@ -509,14 +521,18 @@ public class ExcelDataAccess {
 		}
 		
 		if (columnNum == -1) {
-			throw new FrameworkException("The specified column header \"" + columnHeader + "\"" +
-										" is not found in the sheet \"" + datasheetName + "\"!");
+			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
+										" is not found in the sheet \"" + datasheetName + "\"!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.getCell(columnNum);
 			if (cell == null) {
-				throw new FrameworkException("Specified cell is empty! " +
-											"Please set a value before including a hyperlink...");
+				String errorDescription = "Specified cell is empty! " +
+											"Please set a value before including a hyperlink...";
+				logger.error(errorDescription);
+				throw new FrameworkException(errorDescription);
 			}
 			
 			setCellHyperlink(workbook, cell, linkAddress);
@@ -614,7 +630,9 @@ public class ExcelDataAccess {
 		HSSFPalette palette = workbook.getCustomPalette();
 		
 		if(index < 0x8 || index > 0x40) {
-			throw new FrameworkException("Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!");
+			String errorDescription = "Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		Color color = Color.decode(hexColor);
@@ -687,19 +705,21 @@ public class ExcelDataAccess {
 	public void autoFitContents(int firstCol, int lastCol) {
 		checkPreRequisites();
 		
+		if (firstCol > lastCol) {
+			String errorDescription = "First column cannot be greater than last column!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
+		}
+		
 		HSSFWorkbook workbook = openFileForReading();
 		HSSFSheet worksheet = getWorkSheet(workbook);
 		
-		if (firstCol < 0) {
-			firstCol = 0;
+		int currentColumn = firstCol;
+		if (currentColumn < 0) {
+			currentColumn = 0;
 		}
 		
-		if (firstCol > lastCol) {
-			throw new FrameworkException("First column cannot be greater than last column!");
-		}
-		
-		for (int currentColumn = firstCol;
-					currentColumn <= lastCol; currentColumn++) {
+		for (;currentColumn <= lastCol; currentColumn++) {
 			worksheet.autoSizeColumn(currentColumn);
 		}
 		

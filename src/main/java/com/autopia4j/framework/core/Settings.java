@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
@@ -14,6 +17,7 @@ import com.autopia4j.framework.utils.Util;
  * @author vj
  */
 public class Settings {
+	private static final Logger logger = LoggerFactory.getLogger(Settings.class);
 	private static Properties properties = loadFromPropertiesFile();
 	
 	private Settings() {
@@ -32,6 +36,7 @@ public class Settings {
 		FrameworkParameters frameworkParameters = FrameworkParameters.getInstance();
 		
 		if(frameworkParameters.getBasePath() == null) {
+			logger.error("FrameworkParameters.basePath is not set!");
 			throw new FrameworkException("FrameworkParameters.basePath is not set!");
 		}
 		
@@ -43,14 +48,17 @@ public class Settings {
 									Util.getFileSeparator();
 		
 		File configFile = new File(configFileFolder + "config.custom.properties");
-		if(!configFile.exists()) {
+		if(configFile.exists()) {
+			logger.info("Reading config settings from config.custom.properties");
+		} else {
+			logger.info("Reading config settings from config.default.properties");
 			configFile = new File(configFileFolder + "config.default.properties");
 		}
 		
 		try {
 			properties.load(new FileInputStream(configFile));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Exception while loading the config settings file", e);
 			throw new FrameworkException("IOException while loading the config settings file");
 		}
 		
