@@ -1,5 +1,8 @@
 package com.autopia4j.framework.reporting;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.utils.FrameworkException;
 
 /**
@@ -7,6 +10,8 @@ import com.autopia4j.framework.utils.FrameworkException;
  * @author Cognizant
  */
 public class ReportThemeFactory {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReportThemeFactory.class);
+	
 	private ReportThemeFactory() {
 		// To prevent external instantiation of this class
 	}
@@ -25,6 +30,7 @@ public class ReportThemeFactory {
 	 * @return The {@link ReportTheme} object
 	 */
 	public static ReportTheme getReportsTheme(Theme theme) {
+		LOGGER.info("Initializing report theme: {}", theme);
 		ReportTheme reportTheme = new ReportTheme();
 		
 		switch (theme) {

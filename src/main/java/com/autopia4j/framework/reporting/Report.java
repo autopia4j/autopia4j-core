@@ -139,7 +139,9 @@ public class Report {
 	 */
 	public void initializeTestLog() {
 		if("".equals(reportSettings.getReportName())) {
-			throw new FrameworkException("The report name cannot be empty!");
+			String errorDescription = "The report name cannot be empty!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 		
 		for(int i=0; i < reportTypes.size(); i++) {

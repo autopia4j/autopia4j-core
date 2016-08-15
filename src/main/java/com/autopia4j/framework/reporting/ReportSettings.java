@@ -3,6 +3,9 @@ package com.autopia4j.framework.reporting;
 import java.io.File;
 import java.text.SimpleDateFormat;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.autopia4j.framework.utils.FrameworkException;
 
 
@@ -11,6 +14,7 @@ import com.autopia4j.framework.utils.FrameworkException;
  * @author Cognizant
  */
 public class ReportSettings {
+	private final Logger logger = LoggerFactory.getLogger(ReportSettings.class);
 	private final String reportPath;
 	private final String reportName;
 	
@@ -33,9 +37,12 @@ public class ReportSettings {
 	 * @param reportName The report name
 	 */
 	public ReportSettings(String reportPath, String reportName) {
+		logger.info("Initializing report {} @ {}", reportName, reportPath);
 		boolean reportPathExists = new File(reportPath).isDirectory();
 		if(!reportPathExists) {
-			throw new FrameworkException("The given report path does not exist!");
+			String errorDescription = "The given report path does not exist!";
+			logger.error(errorDescription);
+			throw new FrameworkException(errorDescription);
 		}
 		this.reportPath = reportPath;
 		this.reportName = reportName;
