@@ -9,6 +9,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,7 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.FrameworkParameters;
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.impl.ExcelReport;
 import com.autopia4j.framework.reporting.impl.HtmlReport;
@@ -423,6 +428,23 @@ public class Report {
 	public void addResultSummaryFooter(String totalExecutionTime) {
 		for(int i=0; i < reportTypes.size(); i++) {
 			reportTypes.get(i).addResultSummaryFooter(totalExecutionTime, nTestsPassed, nTestsFailed);
+		}
+	}
+	
+	/**
+	 * Function to copy the log file into the Results folder
+	 */
+	public void copyLogFile() {
+		FrameworkParameters frameworkParameters = FrameworkParameters.getInstance();
+		
+		Path source = Paths.get(frameworkParameters.getBasePath() + Util.getFileSeparator() + "test.execution.log");
+		Path destination = Paths.get(reportSettings.getReportPath() + Util.getFileSeparator() + "test.execution.log");
+		try {
+			Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			String errorDescription = "Error while copying the log file";
+			logger.error(errorDescription, e);
+			throw new FrameworkException(errorDescription);
 		}
 	}
 }
