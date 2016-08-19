@@ -263,10 +263,6 @@ public class ExcelReport implements ReportType {
 			cellFormatting.setForeColorIndex((short) 0x11);
 			break;
 			
-		case DEBUG:
-			cellFormatting.setForeColorIndex((short) 0x12);
-			break;
-			
 		default:
 			throw new AutopiaException("Invalid step status!");
 		}

@@ -21,10 +21,5 @@ public enum Status {
 	/**
 	 * Indicates a message that is logged into the results for informational purposes
 	 */
-	DONE,
-	/**
-	 * Indicates a debug-level message, typically used by automation developers
-	 * to troubleshoot any errors that may occur
-	 */
-	DEBUG;
+	DONE;
 }
