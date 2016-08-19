@@ -6,7 +6,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
 
@@ -35,11 +34,11 @@ public class TimeStamp {
 					
 					if(frameworkParameters.getBasePath() == null) {
 						logger.error("FrameworkParameters.basePath is not set!");
-						throw new FrameworkException("FrameworkParameters.basePath is not set!");
+						throw new AutopiaException("FrameworkParameters.basePath is not set!");
 					}
 					if(frameworkParameters.getRunConfiguration() == null) {
 						logger.error("FrameworkParameters.runConfiguration is not set!");
-						throw new FrameworkException("FrameworkParameters.runConfiguration is not set!");
+						throw new AutopiaException("FrameworkParameters.runConfiguration is not set!");
 					}
 					
 					Properties properties = Settings.getInstance();

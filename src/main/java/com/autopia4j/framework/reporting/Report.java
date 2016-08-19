@@ -21,11 +21,11 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
 import com.autopia4j.framework.core.FrameworkParameters;
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.impl.ExcelReport;
 import com.autopia4j.framework.reporting.impl.HtmlReport;
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 import com.autopia4j.framework.utils.WordDocumentManager;
 
@@ -141,7 +141,7 @@ public class Report {
 		if("".equals(reportSettings.getReportName())) {
 			String errorDescription = "The report name cannot be empty!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		for(int i=0; i < reportTypes.size(); i++) {
@@ -296,7 +296,7 @@ public class Report {
 		} catch (AWTException e) {
 			String errorDescription = "Error while creating Robot object (for taking screenshot)";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		BufferedImage screenshotImage = robot.createScreenCapture(rectangle);
@@ -307,7 +307,7 @@ public class Report {
 		} catch (IOException e) {
 			String errorDescription = "Error while writing screenshot to .jpg file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -451,7 +451,7 @@ public class Report {
 		} catch (IOException e) {
 			String errorDescription = "Error while copying the log file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 }

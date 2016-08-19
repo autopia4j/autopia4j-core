@@ -8,7 +8,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
 
@@ -37,7 +36,7 @@ public class Settings {
 		
 		if(frameworkParameters.getBasePath() == null) {
 			logger.error("FrameworkParameters.basePath is not set!");
-			throw new FrameworkException("FrameworkParameters.basePath is not set!");
+			throw new AutopiaException("FrameworkParameters.basePath is not set!");
 		}
 		
 		Properties properties = new Properties();
@@ -59,7 +58,7 @@ public class Settings {
 			properties.load(new FileInputStream(configFile));
 		} catch (IOException e) {
 			logger.error("Exception while loading the config settings file", e);
-			throw new FrameworkException("IOException while loading the config settings file");
+			throw new AutopiaException("IOException while loading the config settings file");
 		}
 		
 		return properties;

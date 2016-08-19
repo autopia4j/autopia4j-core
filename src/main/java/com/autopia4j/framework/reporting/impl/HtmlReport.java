@@ -13,12 +13,12 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.ReportSettings;
 import com.autopia4j.framework.reporting.ReportTheme;
 import com.autopia4j.framework.reporting.ReportType;
 import com.autopia4j.framework.reporting.Status;
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
 
@@ -211,7 +211,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while creating HTML test log file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		String testLogHeadSection;
@@ -233,7 +233,7 @@ public class HtmlReport implements ReportType {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			String errorDescription = "Error while writing into HTML test log file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -260,7 +260,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding heading to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -279,7 +279,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding header table to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -303,7 +303,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding sub-heading to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -324,7 +324,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding main table to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -355,7 +355,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding main table headings to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -386,7 +386,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding section to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -410,7 +410,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding sub-section to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -443,7 +443,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while updating HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -526,7 +526,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding footer to HTML test log";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -542,7 +542,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while creating HTML result summary file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		String resultSummaryHeader;
@@ -563,7 +563,7 @@ public class HtmlReport implements ReportType {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			String errorDescription = "Error while writing into HTML result summary file";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -590,7 +590,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding heading to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -609,7 +609,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding header table to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -633,7 +633,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding sub-heading to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -655,7 +655,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding main table to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -688,7 +688,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding main table headings to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -741,7 +741,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while updating HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -785,7 +785,7 @@ public class HtmlReport implements ReportType {
 		} catch (IOException e) {
 			String errorDescription = "Error while adding footer to HTML result summary";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 }

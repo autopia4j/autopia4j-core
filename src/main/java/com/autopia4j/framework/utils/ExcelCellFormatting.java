@@ -1,5 +1,7 @@
 package com.autopia4j.framework.utils;
 
+import com.autopia4j.framework.core.AutopiaException;
+
 /**
  * Class to encapsulate the cell formatting settings for the Excel spreadsheet
  * @author vj
@@ -60,7 +62,7 @@ public class ExcelCellFormatting {
 	 */
 	public void setBackColorIndex(short backColorIndex) {
     	if(backColorIndex < 0x8 || backColorIndex > 0x40) {
-			throw new FrameworkException("Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!");
+			throw new AutopiaException("Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!");
 		}
     	
     	this.backColorIndex = backColorIndex;
@@ -80,7 +82,7 @@ public class ExcelCellFormatting {
      */
 	public void setForeColorIndex(short foreColorIndex) {
     	if(foreColorIndex < 0x8 || foreColorIndex > 0x40) {
-			throw new FrameworkException("Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!");
+			throw new AutopiaException("Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!");
 		}
     	
     	this.foreColorIndex = foreColorIndex;

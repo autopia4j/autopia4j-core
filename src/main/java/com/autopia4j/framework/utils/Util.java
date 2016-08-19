@@ -10,6 +10,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
+
 
 /**
  * Class to encapsulate utility functions of the framework
@@ -120,7 +122,7 @@ public class Util {
 		} catch (MalformedURLException e) {
 			String errorDescription = "The specified URL string is malformed";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		return url;
 	}

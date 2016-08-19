@@ -1,5 +1,6 @@
 package com.autopia4j.framework.reporting.impl;
 
+import com.autopia4j.framework.core.AutopiaException;
 import com.autopia4j.framework.core.TestParameters;
 import com.autopia4j.framework.reporting.ReportSettings;
 import com.autopia4j.framework.reporting.ReportTheme;
@@ -7,7 +8,6 @@ import com.autopia4j.framework.reporting.ReportType;
 import com.autopia4j.framework.reporting.Status;
 import com.autopia4j.framework.utils.ExcelCellFormatting;
 import com.autopia4j.framework.utils.ExcelDataAccess;
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
 /**
@@ -268,7 +268,7 @@ public class ExcelReport implements ReportType {
 			break;
 			
 		default:
-			throw new FrameworkException("Invalid step status!");
+			throw new AutopiaException("Invalid step status!");
 		}
 	}
 	

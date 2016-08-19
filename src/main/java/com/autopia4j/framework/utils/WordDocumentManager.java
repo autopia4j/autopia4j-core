@@ -18,6 +18,8 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
+
 /**
  * Class to manage interactions with MS Word Documents
  * @author vj
@@ -58,7 +60,7 @@ public class WordDocumentManager {
 		} catch (IOException e) {
 			String errorDescription = "Error while writing into the specified Word document \"" + absoluteFilePath + "\"";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -86,7 +88,7 @@ public class WordDocumentManager {
 		} catch (InvalidFormatException | IOException e) {
 			String errorDescription = "Exception thrown while adding a picture file to a Word document";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		paragraph = document.createParagraph();
@@ -106,7 +108,7 @@ public class WordDocumentManager {
 		} catch (IOException e) {
 			String errorDescription = "Error while opening the specified Word document \"" + absoluteFilePath + "\"";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 }

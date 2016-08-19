@@ -3,7 +3,7 @@ package com.autopia4j.framework.reporting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.autopia4j.framework.utils.FrameworkException;
+import com.autopia4j.framework.core.AutopiaException;
 
 /**
  * Factory class to create the {@link ReportTheme} object as required
@@ -98,7 +98,7 @@ public class ReportThemeFactory {
 			break;
 			
 		default:
-			throw new FrameworkException("Invalid report theme!");	
+			throw new AutopiaException("Invalid report theme!");	
 		}
 		
 		return reportTheme;

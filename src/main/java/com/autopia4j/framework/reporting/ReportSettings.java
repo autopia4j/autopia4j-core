@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.autopia4j.framework.utils.FrameworkException;
+import com.autopia4j.framework.core.AutopiaException;
 
 
 /**
@@ -42,7 +42,7 @@ public class ReportSettings {
 		if(!reportPathExists) {
 			String errorDescription = "The given report path does not exist!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		this.reportPath = reportPath;
 		this.reportName = reportName;

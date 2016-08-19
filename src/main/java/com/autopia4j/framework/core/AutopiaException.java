@@ -1,4 +1,4 @@
-package com.autopia4j.framework.utils;
+package com.autopia4j.framework.core;
 
 
 /**
@@ -6,7 +6,7 @@ package com.autopia4j.framework.utils;
  * @author vj
  */
 @SuppressWarnings("serial")
-public class FrameworkException extends RuntimeException {
+public class AutopiaException extends RuntimeException {
 	private final String errorName;
 	
 	
@@ -14,7 +14,7 @@ public class FrameworkException extends RuntimeException {
 	 * Constructor to initialize the exception from the framework
 	 * @param errorDescription The Exception message to be thrown
 	 */
-	public FrameworkException(String errorDescription) {
+	public AutopiaException(String errorDescription) {
 		super(errorDescription);
 		this.errorName = "Error";
 	}
@@ -24,7 +24,7 @@ public class FrameworkException extends RuntimeException {
 	 * @param errorName The step name for the error
 	 * @param errorDescription The Exception message to be thrown
 	 */
-	public FrameworkException(String errorName, String errorDescription) {
+	public AutopiaException(String errorName, String errorDescription) {
 		super(errorDescription);
 		this.errorName = errorName;
 	}

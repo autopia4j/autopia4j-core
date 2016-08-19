@@ -23,6 +23,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
+
 
 /**
  * Class to encapsulate the excel data access layer of the framework
@@ -97,7 +99,7 @@ public class ExcelDataAccess {
 		if(datasheetName == null) {
 			String errorDescription = "The datasheetName is not set!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -113,11 +115,11 @@ public class ExcelDataAccess {
 		} catch (FileNotFoundException e) {
 			String errorDescription = "The specified file \"" + absoluteFilePath + "\" does not exist!";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}  catch (IOException e) {
 			String errorDescription = "Error while opening the specified Excel workbook \"" + absoluteFilePath + "\"";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		return workbook;
@@ -129,7 +131,7 @@ public class ExcelDataAccess {
 			String errorDescription = "The specified sheet \"" + datasheetName + "\"" +
 										" does not exist within the workbook \"" + fileName + ".xls\"";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		return worksheet;
@@ -143,7 +145,7 @@ public class ExcelDataAccess {
 				String errorDescription = "Error in formula within this cell! " +
 											"Error code: " + cell.getErrorCellValue();
 				logger.error(errorDescription);
-				throw new FrameworkException(errorDescription);
+				throw new AutopiaException(errorDescription);
 			}
 			
 			DataFormatter dataFormatter = new DataFormatter();
@@ -305,7 +307,7 @@ public class ExcelDataAccess {
 			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
 										" is not found in the sheet \"" + datasheetName + "\"!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.getCell(columnNum);
@@ -382,11 +384,11 @@ public class ExcelDataAccess {
 		} catch (FileNotFoundException e) {
 			String errorDescription = "The specified file \"" + absoluteFilePath + "\" does not exist!";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		} catch (IOException e) {
 			String errorDescription = "Error while writing into the specified Excel workbook \"" + absoluteFilePath + "\"";
 			logger.error(errorDescription, e);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 	}
 	
@@ -435,7 +437,7 @@ public class ExcelDataAccess {
 			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
 										" is not found in the sheet \"" + datasheetName + "\"!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.createCell(columnNum);
@@ -469,7 +471,7 @@ public class ExcelDataAccess {
 			String errorDescription = "Specified cell is empty! " +
 										"Please set a value before including a hyperlink...";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		setCellHyperlink(workbook, cell, linkAddress);
@@ -524,7 +526,7 @@ public class ExcelDataAccess {
 			String errorDescription = "The specified column header \"" + columnHeader + "\"" +
 										" is not found in the sheet \"" + datasheetName + "\"!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		} else {
 			row = worksheet.getRow(rowNum);
 			HSSFCell cell = row.getCell(columnNum);
@@ -532,7 +534,7 @@ public class ExcelDataAccess {
 				String errorDescription = "Specified cell is empty! " +
 											"Please set a value before including a hyperlink...";
 				logger.error(errorDescription);
-				throw new FrameworkException(errorDescription);
+				throw new AutopiaException(errorDescription);
 			}
 			
 			setCellHyperlink(workbook, cell, linkAddress);
@@ -632,7 +634,7 @@ public class ExcelDataAccess {
 		if(index < 0x8 || index > 0x40) {
 			String errorDescription = "Valid indexes for the Excel custom palette are from 0x8 to 0x40 (inclusive)!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		Color color = Color.decode(hexColor);
@@ -708,7 +710,7 @@ public class ExcelDataAccess {
 		if (firstCol > lastCol) {
 			String errorDescription = "First column cannot be greater than last column!";
 			logger.error(errorDescription);
-			throw new FrameworkException(errorDescription);
+			throw new AutopiaException(errorDescription);
 		}
 		
 		HSSFWorkbook workbook = openFileForReading();

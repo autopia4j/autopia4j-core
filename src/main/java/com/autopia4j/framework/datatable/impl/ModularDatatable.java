@@ -3,9 +3,9 @@ package com.autopia4j.framework.datatable.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.autopia4j.framework.core.AutopiaException;
 import com.autopia4j.framework.datatable.DataTableType;
 import com.autopia4j.framework.utils.ExcelDataAccess;
-import com.autopia4j.framework.utils.FrameworkException;
 import com.autopia4j.framework.utils.Util;
 
 /**
@@ -40,7 +40,7 @@ public class ModularDatatable implements DataTableType {
 		if (dataReferenceIdentifier.length() != 1) {
 			String errorMessage = "The data reference identifier must be a single character!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		
 		this.dataReferenceIdentifier = dataReferenceIdentifier;
@@ -58,7 +58,7 @@ public class ModularDatatable implements DataTableType {
 	public void setCurrentRow(String currentTestcase, int currentIteration, int currentSubIteration) {
 		String errorMessage = "setCurrentRow(): Unrecognized argument 'currentSubIteration'!";
 		logger.error(errorMessage);
-		throw new FrameworkException(errorMessage);
+		throw new AutopiaException(errorMessage);
 	}
 	
 	@Override
@@ -70,12 +70,12 @@ public class ModularDatatable implements DataTableType {
 		if(currentTestcase == null) {
 			String errorMessage = "The currentTestCase is not set!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		if(currentIteration == 0) {
 			String errorMessage = "The currentIteration is not set!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class ModularDatatable implements DataTableType {
 			String errorMessage = "The test case \"" + currentTestcase + "\"" +
 										"is not found in the test data sheet \"" + datasheetName + "\"!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
@@ -99,7 +99,7 @@ public class ModularDatatable implements DataTableType {
 										"of the test case \"" + currentTestcase + "\"" +
 										"is not found in the test data sheet \"" + datasheetName + "\"!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		
 		String dataValue = testDataAccess.getValue(rowNum, fieldName);
@@ -122,7 +122,7 @@ public class ModularDatatable implements DataTableType {
 			String errorMessage = "The common test data row identified by \"" + dataReferenceId + "\"" +
 										"is not found in the common test data sheet!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		
 		return commonDataAccess.getValue(rowNum, fieldName);
@@ -140,7 +140,7 @@ public class ModularDatatable implements DataTableType {
 			String errorMessage = "The test case \"" + currentTestcase + "\"" +
 										"is not found in the test data sheet \"" + datasheetName + "\"!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
@@ -148,7 +148,7 @@ public class ModularDatatable implements DataTableType {
 										"of the test case \"" + currentTestcase + "\"" +
 										"is not found in the test data sheet \"" + datasheetName + "\"!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		
 		synchronized(ModularDatatable.class) {
@@ -168,7 +168,7 @@ public class ModularDatatable implements DataTableType {
 			String errorMessage = "The test case \"" + currentTestcase + "\"" +
 										"is not found in the parametrized checkpoints sheet!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
 		if (rowNum == -1) {
@@ -176,7 +176,7 @@ public class ModularDatatable implements DataTableType {
 										"of the test case \"" + currentTestcase + "\"" +
 										"is not found in the parametrized checkpoints sheet!";
 			logger.error(errorMessage);
-			throw new FrameworkException(errorMessage);
+			throw new AutopiaException(errorMessage);
 		}
 		
 		return expectedResultsAccess.getValue(rowNum, fieldName);
