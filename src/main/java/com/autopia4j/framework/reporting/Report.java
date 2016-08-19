@@ -260,20 +260,25 @@ public class Report {
 		String screenshotName = reportSettings.getReportName() + "_" +
 					Util.getCurrentFormattedTime(reportSettings.getDateFormatString())
 					.replace(" ", "_").replace(":", "-") + "_" +
-					stepName.replace(" ", "_") + ".png";
+					stepName.replace(" ", "_");
 		
 		if(shouldTakeScreenshot) {
 			String screenshotPath = reportSettings.getReportPath() +
 										Util.getFileSeparator() + SCREENSHOTS +
-										Util.getFileSeparator() + screenshotName;
+										Util.getFileSeparator() + screenshotName + ".png";
 			if(screenshotPath.length() > 256) {	// Max char limit for Windows filenames
-				screenshotPath = screenshotPath.substring(0, 256);
+				int excessLength = screenshotPath.length() - 256;
+				int truncatedScreenshotNameLength = screenshotName.length() - excessLength;
+				screenshotName = screenshotName.substring(0, truncatedScreenshotNameLength);
+				screenshotPath = reportSettings.getReportPath() +
+									Util.getFileSeparator() + SCREENSHOTS +
+									Util.getFileSeparator() + screenshotName + ".png";
 			}
 			
 			takeScreenshot(screenshotPath);
 		}
 		
-		return screenshotName;
+		return screenshotName.concat(".png");
 	}
 	
 	/**
