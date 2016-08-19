@@ -1,8 +1,6 @@
 package com.autopia4j.framework.core;
 
 import java.io.File;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +39,9 @@ public class TimeStamp {
 						throw new AutopiaException("FrameworkParameters.runConfiguration is not set!");
 					}
 					
-					Properties properties = Settings.getInstance();
 					String timeStamp =
 							"Run_" +
-							Util.getCurrentFormattedTime(properties.getProperty("DateFormatString"))
+							Util.getCurrentFormattedTime(frameworkParameters.getDateFormatString())
 							.replace(" ", "_").replace(":", "-");
 					
 					reportPathWithTimeStamp =

@@ -11,6 +11,7 @@ public class FrameworkParameters {
 	private String runConfiguration;
 	private String executionEnvironment;
 	private boolean stopExecution = false;
+	private String dateFormatString = "dd-MMM-yyyy hh:mm:ss a";
 	
 	private static final FrameworkParameters FRAMEWORK_PARAMETERS =
 													new FrameworkParameters();
@@ -115,6 +116,21 @@ public class FrameworkParameters {
 	 */
 	public void setBasePackageName(String basePackageName) {
 		this.basePackageName = basePackageName;
+	}
+	
+	/**
+	 * Function to get the date format string for the framework
+	 * @return The date format string for the framework
+	 */
+	public String getDateFormatString() {
+		return dateFormatString;
+	}
+	/**
+	 * Function to set the date format string for the framework
+	 * @param dateFormatString The date format string for the framework
+	 */
+	public void setDateFormatString(String dateFormatString) {
+		this.dateFormatString = dateFormatString;
 	}
 	
 	@Override
