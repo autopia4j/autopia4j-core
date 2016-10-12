@@ -52,10 +52,10 @@ public class FrameworkParameters {
 	}
 	/**
 	 * Function to set the absolute path of the framework (to be used as a relative path)
-	 * @param baseePath The absolute path of the framework
+	 * @param basePath The absolute path of the framework
 	 */
-	public void setBasePath(String baseePath) {
-		this.basePath = baseePath;
+	public void setBasePath(String basePath) {
+		this.basePath = basePath;
 	}
 	
 	/**
