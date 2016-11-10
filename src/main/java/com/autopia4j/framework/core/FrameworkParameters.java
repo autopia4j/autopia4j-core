@@ -10,11 +10,14 @@ public class FrameworkParameters {
 	private String basePackageName;
 	private String runConfiguration;
 	private String executionEnvironment;
+	private long objectSyncTimeout;
+	private long pageLoadTimeout;
 	private boolean stopExecution = false;
 	private String dateFormatString = "dd-MMM-yyyy hh:mm:ss a";
 	
 	private static final FrameworkParameters FRAMEWORK_PARAMETERS =
 													new FrameworkParameters();
+	
 	
 	private FrameworkParameters() {
 		// To prevent external instantiation of this class
@@ -86,6 +89,36 @@ public class FrameworkParameters {
 	 */
 	public void setExecutionEnvironment(String executionEnvironment) {
 		this.executionEnvironment = executionEnvironment;
+	}
+	
+	/**
+	 * Function to get the object synchronization timeout
+	 * @return The object synchronization timeout
+	 */
+	public long getObjectSyncTimeout() {
+		return objectSyncTimeout;
+	}
+	/**
+	 * Function to set the object synchronization timeout
+	 * @param objectSyncTimeout The object synchronization timeout
+	 */
+	public void setObjectSyncTimeout(long objectSyncTimeout) {
+		this.objectSyncTimeout = objectSyncTimeout;
+	}
+	
+	/**
+	 * Function to get the page load timeout
+	 * @return The page load timeout
+	 */
+	public long getPageLoadTimeout() {
+		return pageLoadTimeout;
+	}
+	/**
+	 * Function to set the page load timeout
+	 * @param pageLoadTimeout The page load timeout
+	 */
+	public void setPageLoadTimeout(long pageLoadTimeout) {
+		this.pageLoadTimeout = pageLoadTimeout;
 	}
 	
 	/**

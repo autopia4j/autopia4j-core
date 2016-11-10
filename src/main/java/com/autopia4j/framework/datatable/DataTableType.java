@@ -1,6 +1,21 @@
 package com.autopia4j.framework.datatable;
 
+/**
+ * Generic interface for handling datatables within the framework
+ * @author vramas
+ */
 public interface DataTableType {
+	
+	/**
+	 * Function to get the path where the datatable is stored
+	 * @return The path where the datatable is stored
+	 */
+	String getDatatablePath();
+	/**
+	 * Function to get the name of the datatable file
+	 * @return The name of the datatable file
+	 */
+	String getDatatableName();
 	
 	/**
 	 * Function to set the data reference identifier character
@@ -14,6 +29,12 @@ public interface DataTableType {
 	 */
 	int getCurrentIteration();
 	
+	/**
+	 * Function to set the variables required to uniquely identify the exact row of data under consideration.<br>
+	 * Applicable only for modular framework
+	 * @param currentTestcase The ID of the current test case
+	 */
+	void setCurrentRow(String currentTestcase);
 	/**
 	 * Function to set the variables required to uniquely identify the exact row of data under consideration.<br>
 	 * Applicable only for modular framework

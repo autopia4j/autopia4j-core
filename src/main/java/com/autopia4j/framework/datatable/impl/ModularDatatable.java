@@ -9,7 +9,7 @@ import com.autopia4j.framework.utils.ExcelDataAccess;
 import com.autopia4j.framework.utils.Util;
 
 /**
- * Class to encapsulate the datatable related functions of the framework
+ * Class to encapsulate the datatable related functions for the modular implementation
  * @author vj
  */
 public class ModularDatatable implements DataTableType {
@@ -36,6 +36,16 @@ public class ModularDatatable implements DataTableType {
 	}
 	
 	@Override
+	public String getDatatablePath() {
+		return datatablePath;
+	}
+	
+	@Override
+	public String getDatatableName() {
+		return datatableName;
+	}
+	
+	@Override
 	public void setDataReferenceIdentifier(String dataReferenceIdentifier) {
 		if (dataReferenceIdentifier.length() != 1) {
 			String errorMessage = "The data reference identifier must be a single character!";
@@ -44,6 +54,13 @@ public class ModularDatatable implements DataTableType {
 		}
 		
 		this.dataReferenceIdentifier = dataReferenceIdentifier;
+	}
+	
+	@Override
+	public void setCurrentRow(String currentTestcase) {
+		String errorMessage = "setCurrentRow(): Missing argument 'currentIteration'!";
+		logger.error(errorMessage);
+		throw new AutopiaException(errorMessage);
 	}
 	
 	@Override
@@ -56,7 +73,7 @@ public class ModularDatatable implements DataTableType {
 	
 	@Override
 	public void setCurrentRow(String currentTestcase, int currentIteration, int currentSubIteration) {
-		String errorMessage = "setCurrentRow(): Unrecognized argument 'currentSubIteration'!";
+		String errorMessage = "setCurrentRow(): Unrecognized integer argument!";
 		logger.error(errorMessage);
 		throw new AutopiaException(errorMessage);
 	}

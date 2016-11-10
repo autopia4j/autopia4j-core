@@ -9,26 +9,24 @@ import com.autopia4j.framework.utils.ExcelDataAccess;
 import com.autopia4j.framework.utils.Util;
 
 /**
- * Class to encapsulate the datatable related functions for the keyword driven implementation
+ * Class to encapsulate the datatable related functions of the framework
  * @author vj
  */
-public class KeywordDatatable implements DataTableType {
-	private final Logger logger = LoggerFactory.getLogger(KeywordDatatable.class);
+public class SimpleDatatable implements DataTableType {
+	private final Logger logger = LoggerFactory.getLogger(SimpleDatatable.class);
 	private final String datatablePath;
 	private final String datatableName;
 	private String dataReferenceIdentifier = "#";
 	
 	private String currentTestcase;
-	private int currentIteration = 0;
-	private int currentSubIteration = 0;
 	
 	
 	/**
-	 * Constructor to initialize the {@link KeywordDatatable} object
+	 * Constructor to initialize the {@link SimpleDatatable} object
 	 * @param datatablePath The path where the datatable is stored
 	 * @param datatableName The name of the datatable file
 	 */
-	public KeywordDatatable(String datatablePath, String datatableName) {
+	public SimpleDatatable(String datatablePath, String datatableName) {
 		this.datatablePath = datatablePath;
 		this.datatableName = datatableName;
 		
@@ -59,53 +57,33 @@ public class KeywordDatatable implements DataTableType {
 	
 	@Override
 	public void setCurrentRow(String currentTestcase) {
-		String errorMessage = "setCurrentRow(): Missing arguments 'currentIteration' & 'currentSubIteration'!";
-		logger.error(errorMessage);
-		throw new AutopiaException(errorMessage);
+		this.currentTestcase = currentTestcase;
+		
+		logger.debug("Setting current row: " + currentTestcase);
 	}
 	
 	@Override
 	public void setCurrentRow(String currentTestcase, int currentIteration) {
-		String errorMessage = "setCurrentRow(): Missing argument 'currentSubIteration'!";
+		String errorMessage = "setCurrentRow(): Unrecognized integer argument!";
 		logger.error(errorMessage);
 		throw new AutopiaException(errorMessage);
 	}
 	
 	@Override
 	public void setCurrentRow(String currentTestcase, int currentIteration, int currentSubIteration) {
-		this.currentTestcase = currentTestcase;
-		this.currentIteration = currentIteration;
-		this.currentSubIteration = currentSubIteration;
-		
-		logger.debug("Setting current row: " + currentTestcase + ", " + currentIteration + ", " + currentSubIteration);
+		String errorMessage = "setCurrentRow(): Unrecognized integer arguments!";
+		logger.error(errorMessage);
+		throw new AutopiaException(errorMessage);
 	}
 	
 	@Override
 	public int getCurrentIteration() {
-		return currentIteration;
-	}
-	
-	/**
-	 * Function to get the Sub-Iteration being executed currently
-	 * @return The Sub-Iteration being executed currently
-	 */
-	public int getCurrentSubIteration() {
-		return currentSubIteration;
+		return 1;
 	}
 	
 	private void checkPreRequisites() {
 		if(currentTestcase == null) {
 			String errorMessage = "The currentTestCase is not set!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		if(currentIteration == 0) {
-			String errorMessage = "The currentIteration is not set!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		if(currentSubIteration == 0) {
-			String errorMessage = "The currentSubIteration is not set!";
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
@@ -121,24 +99,7 @@ public class KeywordDatatable implements DataTableType {
 		int rowNum = testDataAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
 			String errorMessage = "The test case \"" + currentTestcase + "\"" +
-									"is not found in the test data sheet \"" + datasheetName + "\"!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
-									"of the test case \"" + currentTestcase + "\"" +
-									"is not found in the test data sheet \"" + datasheetName + "\"!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		rowNum = testDataAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
-									"under iteration number \"" + currentIteration + "\"" +
-									"of the test case \"" + currentTestcase + "\"" +
-									"is not found in the test data sheet \"" + datasheetName + "\"!";
+										"is not found in the test data sheet \"" + datasheetName + "\"!";
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
@@ -183,25 +144,8 @@ public class KeywordDatatable implements DataTableType {
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
-		rowNum = testDataAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		rowNum = testDataAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
-										"under iteration number \"" + currentIteration + "\"" +
-										"of the test case \"" + currentTestcase + "\"" +
-										"is not found in the test data sheet \"" + datasheetName + "\"!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
 		
-		synchronized (KeywordDatatable.class) {
+		synchronized(SimpleDatatable.class) {
 			testDataAccess.setValue(rowNum, fieldName, dataValue);
 		}
 	}
@@ -216,24 +160,7 @@ public class KeywordDatatable implements DataTableType {
 		int rowNum = expectedResultsAccess.getRowNum(currentTestcase, 0, 1);	// Start at row 1, skipping the header row
 		if (rowNum == -1) {
 			String errorMessage = "The test case \"" + currentTestcase + "\"" +
-									"is not found in the parametrized checkpoints sheet!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentIteration), 1, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The iteration number \"" + currentIteration + "\"" +
-									"of the test case \"" + currentTestcase + "\"" +
-									"is not found in the parametrized checkpoints sheet!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		rowNum = expectedResultsAccess.getRowNum(Integer.toString(currentSubIteration), 2, rowNum);
-		if (rowNum == -1) {
-			String errorMessage = "The sub iteration number \"" + currentSubIteration + "\"" +
-									"under iteration number \"" + currentIteration + "\"" +
-									"of the test case \"" + currentTestcase + "\"" +
-									"is not found in the parametrized checkpoints sheet!";
+										"is not found in the parametrized checkpoints sheet!";
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
