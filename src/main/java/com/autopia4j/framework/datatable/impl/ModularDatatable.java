@@ -4,21 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.autopia4j.framework.core.AutopiaException;
-import com.autopia4j.framework.datatable.DataTableType;
+import com.autopia4j.framework.datatable.DataTable;
 import com.autopia4j.framework.utils.ExcelDataAccess;
-import com.autopia4j.framework.utils.Util;
 
 /**
  * Class to encapsulate the datatable related functions for the modular implementation
  * @author vj
  */
-public class ModularDatatable implements DataTableType {
+public class ModularDatatable extends DataTable {
 	private final Logger logger = LoggerFactory.getLogger(ModularDatatable.class);
-	private final String datatablePath;
-	private final String datatableName;
-	private String dataReferenceIdentifier = "#";
 	
-	private String currentTestcase;
 	private int currentIteration = 0;
 	
 	
@@ -28,32 +23,15 @@ public class ModularDatatable implements DataTableType {
 	 * @param datatableName The name of the datatable file
 	 */
 	public ModularDatatable(String datatablePath, String datatableName) {
-		this.datatablePath = datatablePath;
-		this.datatableName = datatableName;
-		
-		logger.info("Initializing datatable @ " + datatablePath +
-						Util.getFileSeparator() + datatableName + ".xls");
+		super(datatablePath, datatableName);
 	}
 	
-	@Override
-	public String getDatatablePath() {
-		return datatablePath;
-	}
-	
-	@Override
-	public String getDatatableName() {
-		return datatableName;
-	}
-	
-	@Override
-	public void setDataReferenceIdentifier(String dataReferenceIdentifier) {
-		if (dataReferenceIdentifier.length() != 1) {
-			String errorMessage = "The data reference identifier must be a single character!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		
-		this.dataReferenceIdentifier = dataReferenceIdentifier;
+	/**
+	 * Function to get the Iteration being executed currently
+	 * @return The Iteration being executed currently
+	 */
+	public int getCurrentIteration() {
+		return currentIteration;
 	}
 	
 	@Override
@@ -76,24 +54,6 @@ public class ModularDatatable implements DataTableType {
 		String errorMessage = "setCurrentRow(): Unrecognized integer argument!";
 		logger.error(errorMessage);
 		throw new AutopiaException(errorMessage);
-	}
-	
-	@Override
-	public int getCurrentIteration() {
-		return currentIteration;
-	}
-	
-	private void checkPreRequisites() {
-		if(currentTestcase == null) {
-			String errorMessage = "The currentTestCase is not set!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		if(currentIteration == 0) {
-			String errorMessage = "The currentIteration is not set!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
 	}
 	
 	@Override
@@ -128,21 +88,17 @@ public class ModularDatatable implements DataTableType {
 		return dataValue;
 	}
 	
-	private String getCommonData(String fieldName, String dataValue) {
-		ExcelDataAccess commonDataAccess = new ExcelDataAccess(datatablePath, "Common Testdata");
-		commonDataAccess.setDatasheetName("Common_Testdata");
-		
-		String dataReferenceId = dataValue.split(dataReferenceIdentifier)[1];
-		
-		int rowNum = commonDataAccess.getRowNum(dataReferenceId, 0, 1);	// Start at row 1, skipping the header row
-		if (rowNum == -1) {
-			String errorMessage = "The common test data row identified by \"" + dataReferenceId + "\"" +
-										"is not found in the common test data sheet!";
+	private void checkPreRequisites() {
+		if(currentTestcase == null) {
+			String errorMessage = "The currentTestCase is not set!";
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
-		
-		return commonDataAccess.getValue(rowNum, fieldName);
+		if(currentIteration == 0) {
+			String errorMessage = "The currentIteration is not set!";
+			logger.error(errorMessage);
+			throw new AutopiaException(errorMessage);
+		}
 	}
 	
 	@Override

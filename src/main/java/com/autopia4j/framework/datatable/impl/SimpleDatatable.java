@@ -4,21 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.autopia4j.framework.core.AutopiaException;
-import com.autopia4j.framework.datatable.DataTableType;
+import com.autopia4j.framework.datatable.DataTable;
 import com.autopia4j.framework.utils.ExcelDataAccess;
-import com.autopia4j.framework.utils.Util;
 
 /**
  * Class to encapsulate the datatable related functions of the framework
  * @author vj
  */
-public class SimpleDatatable implements DataTableType {
+public class SimpleDatatable extends DataTable {
 	private final Logger logger = LoggerFactory.getLogger(SimpleDatatable.class);
-	private final String datatablePath;
-	private final String datatableName;
-	private String dataReferenceIdentifier = "#";
-	
-	private String currentTestcase;
 	
 	
 	/**
@@ -27,32 +21,7 @@ public class SimpleDatatable implements DataTableType {
 	 * @param datatableName The name of the datatable file
 	 */
 	public SimpleDatatable(String datatablePath, String datatableName) {
-		this.datatablePath = datatablePath;
-		this.datatableName = datatableName;
-		
-		logger.info("Initializing datatable @ " + datatablePath +
-						Util.getFileSeparator() + datatableName + ".xls");
-	}
-	
-	@Override
-	public String getDatatablePath() {
-		return datatablePath;
-	}
-	
-	@Override
-	public String getDatatableName() {
-		return datatableName;
-	}
-	
-	@Override
-	public void setDataReferenceIdentifier(String dataReferenceIdentifier) {
-		if (dataReferenceIdentifier.length() != 1) {
-			String errorMessage = "The data reference identifier must be a single character!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
-		
-		this.dataReferenceIdentifier = dataReferenceIdentifier;
+		super(datatablePath, datatableName);
 	}
 	
 	@Override
@@ -74,19 +43,6 @@ public class SimpleDatatable implements DataTableType {
 		String errorMessage = "setCurrentRow(): Unrecognized integer arguments!";
 		logger.error(errorMessage);
 		throw new AutopiaException(errorMessage);
-	}
-	
-	@Override
-	public int getCurrentIteration() {
-		return 1;
-	}
-	
-	private void checkPreRequisites() {
-		if(currentTestcase == null) {
-			String errorMessage = "The currentTestCase is not set!";
-			logger.error(errorMessage);
-			throw new AutopiaException(errorMessage);
-		}
 	}
 	
 	@Override
@@ -113,21 +69,12 @@ public class SimpleDatatable implements DataTableType {
 		return dataValue;
 	}
 	
-	private String getCommonData(String fieldName, String dataValue) {
-		ExcelDataAccess commonDataAccess = new ExcelDataAccess(datatablePath, "Common Testdata");
-		commonDataAccess.setDatasheetName("Common_Testdata");
-		
-		String dataReferenceId = dataValue.split(dataReferenceIdentifier)[1];
-		
-		int rowNum = commonDataAccess.getRowNum(dataReferenceId, 0, 1);	// Start at row 1, skipping the header row
-		if (rowNum == -1) {
-			String errorMessage = "The common test data row identified by \"" + dataReferenceId + "\"" +
-										"is not found in the common test data sheet!";
+	private void checkPreRequisites() {
+		if(currentTestcase == null) {
+			String errorMessage = "The currentTestCase is not set!";
 			logger.error(errorMessage);
 			throw new AutopiaException(errorMessage);
 		}
-		
-		return commonDataAccess.getValue(rowNum, fieldName);
 	}
 	
 	@Override
