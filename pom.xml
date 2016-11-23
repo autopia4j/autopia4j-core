@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.autopia4j.framework</groupId>
   <artifactId>autopia4j-core</artifactId>
-  <version>1.1.8</version>
+  <version>1.1.9</version>
   <name>autopia4j framework core library</name>
   <description>autopia4j framework core library</description>
   <build>
@@ -36,6 +36,11 @@
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>1.7.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.testng</groupId>
+  		<artifactId>testng</artifactId>
+  		<version>6.9.10</version>
   	</dependency>
   </dependencies>
   <properties>
