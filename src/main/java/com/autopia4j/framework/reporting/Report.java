@@ -260,7 +260,7 @@ public class Report {
 		String screenshotName = reportSettings.getReportName() + "_" +
 					Util.getCurrentFormattedTime(reportSettings.getDateFormatString())
 					.replace(" ", "_").replace(":", "-") + "_" +
-					stepName.replace(" ", "_");
+					stepName.replace(" ", "_").replaceAll("[^a-zA-Z0-9.-]", "");
 		
 		if(shouldTakeScreenshot) {
 			String screenshotPath = reportSettings.getReportPath() +
