@@ -11,8 +11,8 @@ import com.autopia4j.framework.utils.Util;
  * Abstract base class for datatables within the autopia4j framework
  * @author vj
  */
-public abstract class DataTable {
-	private final Logger logger = LoggerFactory.getLogger(DataTable.class);
+public abstract class BaseDatatable {
+	private final Logger logger = LoggerFactory.getLogger(BaseDatatable.class);
 	protected final String datatablePath;
 	protected final String datatableName;
 	protected String dataReferenceIdentifier = "#";
@@ -21,11 +21,11 @@ public abstract class DataTable {
 	
 	
 	/**
-	 * Constructor to initialize the {@link DataTable} object
+	 * Constructor to initialize the {@link BaseDatatable} object
 	 * @param datatablePath The path where the datatable is stored
 	 * @param datatableName The name of the datatable file
 	 */
-	public DataTable(String datatablePath, String datatableName) {
+	public BaseDatatable(String datatablePath, String datatableName) {
 		this.datatablePath = datatablePath;
 		this.datatableName = datatableName;
 		

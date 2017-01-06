@@ -4,23 +4,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.autopia4j.framework.core.AutopiaException;
-import com.autopia4j.framework.datatable.DataTable;
+import com.autopia4j.framework.datatable.BaseDatatable;
 import com.autopia4j.framework.utils.ExcelDataAccess;
 
 /**
- * Class to encapsulate the datatable related functions of the framework
+ * Class that implements a non-iterative datatable, enabling a single row of data to be mapped to each test case
  * @author vj
  */
-public class SimpleDatatable extends DataTable {
-	private final Logger logger = LoggerFactory.getLogger(SimpleDatatable.class);
+public class NonIterativeDatatable extends BaseDatatable {
+	private final Logger logger = LoggerFactory.getLogger(NonIterativeDatatable.class);
 	
 	
 	/**
-	 * Constructor to initialize the {@link SimpleDatatable} object
+	 * Constructor to initialize the {@link NonIterativeDatatable} object
 	 * @param datatablePath The path where the datatable is stored
 	 * @param datatableName The name of the datatable file
 	 */
-	public SimpleDatatable(String datatablePath, String datatableName) {
+	public NonIterativeDatatable(String datatablePath, String datatableName) {
 		super(datatablePath, datatableName);
 	}
 	
@@ -92,7 +92,7 @@ public class SimpleDatatable extends DataTable {
 			throw new AutopiaException(errorMessage);
 		}
 		
-		synchronized(SimpleDatatable.class) {
+		synchronized(NonIterativeDatatable.class) {
 			testDataAccess.setValue(rowNum, fieldName, dataValue);
 		}
 	}
